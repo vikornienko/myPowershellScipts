@@ -19,6 +19,25 @@ function Add-ProjectParameters {
     
 }
 
+function New-ProjectDirectory {
+    # Создаёт папку проекта и переходит в неё
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ProjectName
+    )
+    
+    try {
+        New-Item -ItemType Directory -Name $ProjectName -ErrorAction Stop | Out-Null
+        Set-Location $ProjectName
+        Write-Host "Folder '$ProjectName' created." -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Не удалось создать папку '$ProjectName': $_"
+        throw
+    }
+}
+
 
 # Создает папку проекта и переходит с нее.
 # New-Item -ItemType Directory -Name $projectName | Out-Null
