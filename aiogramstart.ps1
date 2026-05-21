@@ -38,7 +38,38 @@ function New-ProjectDirectory {
     }
 }
 
+function Initialize-VirtualEnvironment {
+    # Создаёт виртуальное окружение с указанной версией Python
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$PythonVersion        
+    )
+    
+    try {
+        uv pin python $PythonVersion -ErrorAction Stop
+        uv init . --bare --python $PythonVersion -ErrorAction Stop
+        uv venv -ErrorAction Stop
+        Write-Host "Виртуальное окружение '$VenvName' создано с Python $PythonVersion." -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Ошибка при создании виртуального окружения: $_"
+        throw
+    }
+}
 
+function Install-Dependencies {
+    # Устанавливает зависимости (aiogram) в виртуальное окружение
+            
+    try {
+        uv add aiogram aiosqlite sqlalchemy python-decouple -ErrorAction Stop
+        Write-Host "Зависимости успешно установлены." -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Ошибка при установке зависимостей: $_"
+        throw
+    }
+}
 # Создает папку проекта и переходит с нее.
 # New-Item -ItemType Directory -Name $projectName | Out-Null
 # Set-Location $projectName
