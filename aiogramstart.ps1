@@ -249,6 +249,14 @@ function Main {
         Write-Error "Project name and Python version are required."
         return
     }
+
+    New-ProjectDirectory -ProjectName $params.ProjectName
+    Initialize-VirtualEnvironment -PythonVersion $params.PythonVersion
+    Install-Dependencies
+    New-GitignoreFile
+    New-BotStarterFile
+
+    Write-Host "`nПроект '$($params.ProjectName)' успешно настроен." -ForegroundColor Cyan
     
 }
 # Запуск скрипта
