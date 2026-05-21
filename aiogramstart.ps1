@@ -70,166 +70,176 @@ function Install-Dependencies {
         throw
     }
 }
-# Создает папку проекта и переходит с нее.
-# New-Item -ItemType Directory -Name $projectName | Out-Null
-# Set-Location $projectName
 
-# uv init . --bare --python $pythonVersion
-# uv sync
-# uv add aiogram aiosqlite sqlalchemy python-decouple
+function New-GitignoreFile {
+    # Создаёт файл .gitignore с типовым содержимым для Python-проектов
+    [CmdletBinding()]
+    param(
+        [string]$Path = '.\.gitignore'
+    )
+    
+    $gitignoreContent = @"
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Создает файл .gitignore
-# @"
-# # Byte-compiled / optimized / DLL files
-# __pycache__/
-# *.py[cod]
-# *$py.class
+# C extensions
+*.so
 
-# # C extensions
-# *.so
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# # Distribution / packaging
-# .Python
-# build/
-# develop-eggs/
-# dist/
-# downloads/
-# eggs/
-# .eggs/
-# lib/
-# lib64/
-# parts/
-# sdist/
-# var/
-# wheels/
-# share/python-wheels/
-# *.egg-info/
-# .installed.cfg
-# *.egg
-# MANIFEST
+# PyInstaller
+*.manifest
+*.spec
 
-# # PyInstaller
-# *.manifest
-# *.spec
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-# # Installer logs
-# pip-log.txt
-# pip-delete-this-directory.txt
+# Logs
+/logs/
 
-# # Logs
-# /logs/
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
 
-# # Unit test / coverage reports
-# htmlcov/
-# .tox/
-# .nox/
-# .coverage
-# .coverage.*
-# .cache
-# nosetests.xml
-# coverage.xml
-# *.cover
-# *.py,cover
-# .hypothesis/
-# .pytest_cache/
-# cover/
+# Translations
+*.mo
+*.pot
 
-# # Translations
-# *.mo
-# *.pot
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
 
-# # Django stuff:
-# *.log
-# local_settings.py
-# db.sqlite3
-# db.sqlite3-journal
+# Flask stuff:
+instance/
+.webassets-cache
 
-# # Flask stuff:
-# instance/
-# .webassets-cache
+# Scrapy stuff:
+.scrapy
 
-# # Scrapy stuff:
-# .scrapy
+# Sphinx documentation
+docs/_build/
 
-# # Sphinx documentation
-# docs/_build/
+# PyBuilder
+.pybuilder/
+target/
 
-# # PyBuilder
-# .pybuilder/
-# target/
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# # Jupyter Notebook
-# .ipynb_checkpoints
+# IPython
+profile_default/
+ipython_config.py
 
-# # IPython
-# profile_default/
-# ipython_config.py
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
 
-# # PEP 582; used by e.g. github.com/David-OConnor/pyflow
-# __pypackages__/
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
 
-# # Celery stuff
-# celerybeat-schedule
-# celerybeat.pid
+# SageMath parsed files
+*.sage.py
 
-# # SageMath parsed files
-# *.sage.py
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# # Environments
-# .env
-# .venv
-# env/
-# venv/
-# ENV/
-# env.bak/
-# venv.bak/
+# Spyder project settings
+.spyderproject
+.spyproject
 
-# # Spyder project settings
-# .spyderproject
-# .spyproject
+# Rope project settings
+.ropeproject
 
-# # Rope project settings
-# .ropeproject
+# mkdocs documentation
+/site
 
-# # mkdocs documentation
-# /site
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
-# # mypy
-# .mypy_cache/
-# .dmypy.json
-# dmypy.json
+# Pyre type checker
+.pyre/
 
-# # Pyre type checker
-# .pyre/
+# pytype static type analyzer
+.pytype/
 
-# # pytype static type analyzer
-# .pytype/
+# Cython debug symbols
+cython_debug/
 
-# # Cython debug symbols
-# cython_debug/
+# Editors
+.vscode/
+.idea/
 
-# # Editors
-# .vscode/
-# .idea/
+# Vagrant
+.vagrant/
 
-# # Vagrant
-# .vagrant/
+# Mac/OSX
+.DS_Store
 
-# # Mac/OSX
-# .DS_Store
+# Windows
+Thumbs.db
 
-# # Windows
-# Thumbs.db
+# pyenv
+.python-version
 
-# # pyenv
-# .python-version
+# Project specific
+functionalTesting/geckodriver.log
+functionalTesting/swb/geckodriver
+/other_files/
+/getinfoapp/files/
+"@
+    
+    try {
+        $gitignoreContent | Out-File -FilePath $Path -Encoding utf8 -ErrorAction Stop
+        Write-Host ".gitignore создан." -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Не удалось создать .gitignore: $_"
+        throw
+    }
+}
 
-# # Project specific
-# functionalTesting/geckodriver.log
-# functionalTesting/swb/geckodriver
-# /other_files/
-# /getinfoapp/files/
-# "@ | Out-File -FilePath .\.gitignore -Encoding utf8
 
 function Main {
     # Основная логика скрипта
