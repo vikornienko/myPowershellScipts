@@ -240,6 +240,46 @@ functionalTesting/swb/geckodriver
     }
 }
 
+function New-BotStarterFile {
+    # Создаёт простой файл bot.py для первичного старта проекта
+    [CmdletBinding()]
+    param(
+        [string]$Path = '.\bot.py'
+    )
+    
+    $botContent = @"
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.enums import ParseMode
+from aiogram.filters import CommandStart
+from aiogram.types import Message
+
+# Токен бота (замените на свой)
+BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher()
+
+@dp.message(CommandStart())
+async def command_start_handler(message: Message) -> None:
+    await message.answer(f"Hello, {message.from_user.full_name}!")
+
+async def main() -> None:
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+"@
+    
+    try {
+        $botContent | Out-File -FilePath $Path -Encoding utf8 -ErrorAction Stop
+        Write-Host "Файл bot.py создан." -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Не удалось создать bot.py: $_"
+        throw
+    }
+}
 
 function Main {
     # Основная логика скрипта
