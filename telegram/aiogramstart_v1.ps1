@@ -226,28 +226,28 @@ functionalTesting/swb/geckodriver
     Write-Host "Файл .gitignore успешно создан." -ForegroundColor Green
 }
 
-# function New-Readme {
-#     param([string]$ProjectName)
-#     Write-Host "`n=== Создание файла README.md ===" -ForegroundColor Cyan
-#     $description = Read-Host "Введите описание проекта"
+function New-Readme {
+    param([string]$ProjectName)
+    Write-Host "`n=== Создание файла README.md ===" -ForegroundColor Cyan
+    $description = Read-Host "Введите описание проекта"
     
-#     $readmeContent = @"
-# # $ProjectName
+    $readmeContent = @"
+# $ProjectName
 
-# $description
+$description
 
-# ## Стек
-# - Python
-# - aiogram 3
-# - uv
+## Стек
+`- Python
+`- aiogram 3
+`- uv
 
-# ## Запуск
-# 1. Установите зависимости: ``uv sync``
-# 2. Запустите бота: ``python src/bot.py``
-# "@
-#     Set-Content -Path "README.md" -Value $readmeContent -Encoding UTF8
-#     Write-Host "Файл README.md успешно создан." -ForegroundColor Green
-# }
+## Запуск
+1. Установите зависимости: ``uv sync``
+2. Запустите бота: ``python src/bot.py``
+"@
+    Set-Content -Path "README.md" -Value $readmeContent -Encoding UTF8
+    Write-Host "Файл README.md успешно создан." -ForegroundColor Green
+}
 
 function New-SourceStructure {
     Write-Host "`n=== Создание структуры исходного кода ===" -ForegroundColor Cyan
@@ -294,7 +294,7 @@ try {
     Initialize-VirtualEnvironment -PythonVersion $details.PythonVersion
     Install-Dependencies
     New-Gitignore
-    # New-Readme -ProjectName $details.Name
+    New-Readme -ProjectName $details.Name
     New-SourceStructure
     
     Write-Host "`n=== Проект успешно создан и готов к разработке! ===" -ForegroundColor Green
