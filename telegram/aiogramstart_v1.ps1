@@ -249,6 +249,20 @@ $description
     Write-Host "Файл README.md успешно создан." -ForegroundColor Green
 }
 
+function New-Envfile {
+    Write-Host "=== Запрос токена бота и создание файла .env ===" -ForegroundColor Cyan
+    $token = Read-Host "Укажите токен бота"
+    if ([string]::IsNullOrWriteSpace($token)) {
+        throw "Токен не может быть пустым."
+    }
+
+    $dotenvContent = @"
+BOT_TOKEN=$token
+"@
+    Set-Content -Path ".env" -Value $dotenvContent -Encoding UTF8
+    Write-Host "Файл .env успешно создан." -ForegroundColor Green
+}
+
 function New-SourceStructure {
     Write-Host "`n=== Создание структуры исходного кода ===" -ForegroundColor Cyan
     
@@ -295,6 +309,7 @@ try {
     Install-Dependencies
     New-Gitignore
     New-Readme -ProjectName $details.Name
+    New-Envfile
     New-SourceStructure
     
     Write-Host "`n=== Проект успешно создан и готов к разработке! ===" -ForegroundColor Green
